@@ -2,6 +2,7 @@
 	The solution is created by Alexander Poole alex.o.poole@gmail.com
 */
 #include <queue>
+#include <algorithm>
 
 /* Custom classes ----
 */
@@ -162,7 +163,7 @@ int FindPath(const int nStartX, const int nStartY,
 			int i = shortestPath-1;
 			Node * parent = currentNode->getParent();
 			// Backtracing path to goal 
-			while (parent != NULL)
+			while (parent->getParent() != NULL)
 			{	
 				i--;
 				pOutBuffer[i] = parent->getPos();
@@ -217,3 +218,11 @@ int FindPath(const int nStartX, const int nStartY,
 	return -1;
 }
 
+int main(){
+
+	unsigned char pMap[] = { 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1 };
+	int pOutBuffer[12];
+	FindPath(0, 0, 1, 2, pMap, 4, 3, pOutBuffer, 12);
+
+	return 0;
+}
