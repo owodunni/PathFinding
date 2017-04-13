@@ -1,2 +1,2 @@
 # PathFinding
-A* implementation for solving path finding problem.
+A* implementation for solving paradox path finding problem.
