@@ -12,7 +12,6 @@ class Node
 {
 public:
 	Node(const int nX, const int nY,
-		const int nTargetX, const int nTargetY,
 		const int pos, const int costToNode, const int costToGoal, Node * parent) {
 		nMyX = nX;
 		nMyY = nY;
@@ -129,12 +128,10 @@ int FindPath(const int nStartX, const int nStartY,
 	int shortestPath = 0;
 
 	Node finalNode(nTargetX, nTargetY,
-		nTargetX, nTargetY,
-		Pos(nTargetX, nTargetY, nMapWidth), -1, -1, NULL);
+		Pos(nTargetX, nTargetY, nMapWidth), -1, -1, nullptr);
 
 	Node startNode(nStartX, nStartY, 
-		nTargetX, nTargetY, 
-		Pos(nStartX, nStartY, nMapWidth), 0, -1, NULL);
+		Pos(nStartX, nStartY, nMapWidth), 0, -1, nullptr);
 
 	// If startNode equals finalNode add it to buffer
 	if (finalNode.getPos() == startNode.getPos()) {
@@ -163,7 +160,7 @@ int FindPath(const int nStartX, const int nStartY,
 			int i = shortestPath-1;
 			Node * parent = currentNode->getParent();
 			// Backtracing path to goal 
-			while (parent->getParent() != NULL)
+			while (parent->getParent() != nullptr)
 			{	
 				i--;
 				pOutBuffer[i] = parent->getPos();
@@ -175,14 +172,16 @@ int FindPath(const int nStartX, const int nStartY,
 			int neighbourhood[4] = { 1, 0 , -1, 0 };
 
 			// Loops through possible neighbourNodes and adds them if they are new
-			for (size_t j = 0; j < 4; j++)
+			for (int j = 0; j < 4; j++)
 			{	
 				const int nX = currentNode->getX() + neighbourhood[j % 4];
 				const int nY = currentNode->getY() + neighbourhood[(j + 1) % 4];
 				const int pos = Pos(nX, nY, nMapWidth);
 				
 				// Check if neighbourNode is in valid position
-				if ((nX < 0 || nX == nMapWidth) || (nY < 0 || nY == nMapHeight) || pMap[pos] == 0) {
+				if ((nX < 0 || nX == nMapWidth) || 
+				    (nY < 0 || nY == nMapHeight) || 
+				     pMap[pos] == 0) {
 					continue;
 				}
 				// Node has already been visited
@@ -195,17 +194,19 @@ int FindPath(const int nStartX, const int nStartY,
 					const int g = currentNode->getCost() + 1;
 					const int h = costToGoal(nX, nY, nTargetX, nTargetY);
 
-					AstarQueue<Node *, std::vector<Node *>, std::less<Node>>::const_iterator openNodesIt = openNodes.find(pos);
+					AstarQueue<Node *, std::vector<Node *>, 
+						std::less<Node>>::const_iterator openNodesIt = 
+							openNodes.find(pos);
 
 					// Adding a new node to openNodes
 					if (openNodesIt == openNodes.end())
 					{
 						Node * neighbourNode = new Node(nX, nY,
-							nTargetX, nTargetY,
 							pos, g, h, currentNode);
 						openNodes.push(neighbourNode);
 					}
-					// Node already exists, updating if a better path to node is found
+					// Node already exists, updating if a better 
+					// path to node is found
 					else if ((*openNodesIt)->getScore() > g + h) {
 						(*openNodesIt)->setScore(g);
 						(*openNodesIt)->setParent(currentNode);
